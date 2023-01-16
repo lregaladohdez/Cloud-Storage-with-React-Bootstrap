@@ -3,11 +3,10 @@ import FileListItem from "./FileListItem";
 
 function FilesList(): ReactElement { 
     return (<div>
-        <ul>
-            <li><FileListItem></FileListItem></li>
-            <li><FileListItem></FileListItem></li>
-            <li><FileListItem></FileListItem></li>
-        </ul>
+            <FileListItem></FileListItem>
+            <FileListItem></FileListItem>
+            <FileListItem></FileListItem>
+        
     </div>)
 }
 

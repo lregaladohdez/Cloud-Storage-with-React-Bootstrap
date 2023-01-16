@@ -6,7 +6,8 @@ function ShareInfoCard() {
         <div className="flex-fill">
             <Stack gap={3} style={{ borderRadius: 5, boxShadow: ' 0px 3px 10px 0px rgba(0, 0, 0, 0.3)' }}>
                 <Stack gap={2} direction="horizontal" className="d-flex align-items-center" style={{ margin: 15 }}>
-                    <Image fluid style={{ height: 64, width: 64, backgroundColor: '#e0e0e0' }} src={logo} />
+                    {/* <Image fluid style={{ height: 64, width: 64, backgroundColor: '#e0e0e0' }} src={logo} /> */}
+                    <Icon.PersonFill size={64} color="#03A9F4"> </Icon.PersonFill>
                     <Stack>
                         <h4 style={{ textAlign: 'left', fontWeight: "600" }}> Drible Files</h4>
                         <h5 style={{ color: '#c0c0c0', textAlign: 'left' }}> <small>16gb free of 26</small></h5>
@@ -27,7 +28,7 @@ function ShareInfoCard() {
                         <span style={{textAlign: 'left'}}>Shared Users</span>
                         <Stack direction="horizontal" gap={1}>
                             {
-                                ['red', 'blue', 'green', 'red', 'blue'].map((c, i) => (
+                                ['orange', 'blue', 'green', 'red', 'yellow'].map((c, i) => (
                                     <Image key={c} roundedCircle style={{
                                         border: '1px solid white',
                                         margin: i > 0

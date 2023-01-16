@@ -8,7 +8,7 @@ function FilterFiles() {
         { name: 'Size' },
         { name: '5mb' },
         { name: '10mb' },
-        { name: '10mb' }
+        { name: '50mb' }
     ];
     const times = [
         { name: 'Time' },
@@ -19,27 +19,42 @@ function FilterFiles() {
         { name: 'Last 30 days' },
     ]
     const statuses = [
-        {name: 'Status'},
+        { name: 'Status' },
         { name: 'Uploaded' },
         { name: 'Uploading' },
-        {name: 'Shared'},
+        { name: 'Shared' },
     ]
     return (
-        <Stack direction="horizontal" gap={3}>
-            <Form.Select placeholder="Time" >
-                {times.map(t => <option key={t.name}>{t.name}</option>)}
-            </Form.Select>
-            <InputGroup className="me-auto">
-            <InputGroup.Text><Icon.Search/></InputGroup.Text>
-            <Form.Control placeholder="Search" />
-          </InputGroup>
-            <Form.Select>
-                {statuses.map(t => <option key={t.name}>{t.name}</option>)}
-            </Form.Select>
-            <Form.Select >
-                {sizes.map(t => <option key={t.name}>{t.name}</option>)}
-            </Form.Select>
-        </Stack>
+        <Form className='mb-2'>
+            <Row>
+                <Col sm={2}>
+                    <Form.Select placeholder="Time" >
+                        {times.map(t => <option key={t.name}>{t.name}</option>)}
+                    </Form.Select>
+                
+                </Col>
+                <Col sm={12} md={6}>
+                    <InputGroup className="me-auto">
+                        <InputGroup.Text><Icon.Search /></InputGroup.Text>
+                        <Form.Control placeholder="Search" />
+                    </InputGroup>
+                
+                </Col>
+                <Col sm={2}>
+                    <Form.Select>
+                        {statuses.map(t => <option key={t.name}>{t.name}</option>)}
+                    </Form.Select>
+                
+                </Col>
+                <Col sm={2}>
+                    <Form.Select >
+                        {sizes.map(t => <option key={t.name}>{t.name}</option>)}
+                    </Form.Select>
+                </Col>
+                
+            </Row>
+            
+        </Form>
     );
 }
 
