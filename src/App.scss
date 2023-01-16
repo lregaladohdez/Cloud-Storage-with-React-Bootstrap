@@ -36,3 +36,12 @@
     transform: rotate(360deg);
   }
 }
+
+$theme-colors: (
+  "document": hsl(119, 70%, 50%),
+  "archive": hsl(99, 70%, 50%),
+  "video": hsl(164, 70%, 50%),
+  "image": hsl(203, 70%, 50%)
+);
+
+@import '~bootstrap/scss/bootstrap.scss';
