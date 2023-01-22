@@ -1,43 +1,64 @@
-import { Container, Stack } from 'react-bootstrap';
+import { Container, Spinner, Stack } from 'react-bootstrap';
 import './App.scss';
 import FilterFiles from './components/FilterFIles';
 import Uploader from './components/Uploader';
 import FilesDistributionGraph from './components/FilesDistributionGraph';
 import ShareInfoCard from './components/ShareInfoCard';
 import FilesList from './components/FilesList';
+import { isError, QueryClient, QueryClientProvider, useQuery } from 'react-query';
+import { getFiles } from './services/api';
+import { useState } from 'react';
+import useDebounce from './hooks/useDebounce';
+
 
 function App() {
+  
+
+  const [minSize, setMinSize] = useState(0)
+  const [status, setStatus] = useState(null);
+  const [search, setSearch] = useState('');
+  const [dateRange, setDateRange] = useState({ createdAtStart: '', createdAtEnd: '' })
+  const debouncedSearch = useDebounce<string>(search, 500)
+  const { data, error, isLoading } = useQuery(`getFiles-${minSize}-${status}-${debouncedSearch}-${dateRange}`,
+    () => getFiles({ status, createdAtEnd: dateRange.createdAtEnd, createdAtStart: dateRange.createdAtStart, search:debouncedSearch, take: 10, skip: 0, minSize }));
+  
+  console.log(minSize);
   return (
     <Container className="App">
-      {/* <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <Button as="a"
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </Button>
-      </header> */}
-      <Stack gap={3} style={{marginTop:10}}>
+      <Stack gap={3} style={{ marginTop: 10 }}>
         <Stack direction='horizontal' gap={3} className="d-flex justify-content-around flex-wrap">
           <FilesDistributionGraph></FilesDistributionGraph>
           <ShareInfoCard></ShareInfoCard>
         </Stack>
         <hr />
         <Uploader></Uploader>
-        <FilterFiles></FilterFiles>
-        <FilesList></FilesList>
+        <FilterFiles search={search}
+          setSearch={setSearch}
+          dateRange={dateRange}
+          setDateRange={setDateRange}
+          status={status}
+          setStatus={setStatus}
+          minSize={minSize}
+          setMinSize={setMinSize}></FilterFiles>
+        {isLoading && <Spinner animation="border" variant='primary' className='d-flex align-self-center' />}
+        {data?.data && <FilesList files={data?.data || []}></FilesList>}
       </Stack>
-        
-        
-      
     </Container>
   );
 }
+function Wrapper() { 
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        retry: 0
+      }
+    }
+})
+  return (
+    <QueryClientProvider client={queryClient}>
+      <App></App>
+    </QueryClientProvider>
+  )
+}
 
-export default App;
+export default Wrapper;
