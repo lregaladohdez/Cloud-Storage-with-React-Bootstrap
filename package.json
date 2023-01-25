@@ -1,5 +1,8 @@
 {
   "name": "upload-center",
+  "author": {
+    "name": "Lorenzo Regalado Hernández"
+  },
   "version": "0.1.0",
   "private": true,
   "dependencies": {
