@@ -1,33 +1,38 @@
 // install (please make sure versions match peerDependencies)
 // yarn add @nivo/core @nivo/pie
 import { ResponsivePie } from '@nivo/pie'
+import prettyBytes from 'pretty-bytes';
 import { ReactElement } from 'react'
+import { Spinner } from 'react-bootstrap';
 import Ratio from 'react-bootstrap/Ratio';
+import { useQuery } from 'react-query';
+import { getFilesGrouped } from '../services/api';
 
 function FilesDistributionGraph(): ReactElement{
+    const { data: filesGrouped, error, isLoading } = useQuery(`getFilesGrouped`, () => getFilesGrouped());
    const data = [
   {
     "id": "Documents",
     "label": "Documents",
-    "value": 195,
+    "value": filesGrouped?.Document,
     "color": "hsl(119, 70%, 50%)"
   },
   {
     "id": "Archives",
     "label": "Archives",
-    "value": 312,
+    "value": filesGrouped?.Archive,
     "color": "hsl(164, 70%, 50%)"
   },
   {
     "id": "Video",
     "label": "Video",
-    "value": 566,
+    "value": filesGrouped?.Video,
     "color": "hsl(99, 70%, 50%)"
   },
   {
     "id": "Images",
     "label": "Images",
-    "value": 430,
+    "value": filesGrouped?.Image,
     "color": "hsl(203, 70%, 50%)"
   },
   ]
@@ -51,15 +56,21 @@ function FilesDistributionGraph(): ReactElement{
                     
                 }}
             >
-                {total}<tspan dominantBaseline="central" alignmentBaseline='mathematical' style={{
+                {prettyBytes(total * 1024 * 1024,{maximumFractionDigits: 2}).split(' ')[0]}<tspan dominantBaseline="central" alignmentBaseline='mathematical' style={{
                     fontSize: '30px',
                     fontWeight: 30,
-                }}>GB</tspan>
+                }}>{prettyBytes(total * 1024 * 1024,{maximumFractionDigits: 2}).split(' ')[1] }</tspan>
             </text>
         
         )
     }
-    // const customshape : React.FC<SymbolProps> = (data):
+    if (isLoading ) {
+        return (
+            <div className="d-flex flex-fill justify-content-center">
+                <Spinner animation="border" variant='primary' className='d-flex align-self-center' />
+            </div>
+            )
+    }
     return (
         <Ratio aspectRatio={'16x9'} style={{ width: '30vh'  }} className="flex-fill">
             <ResponsivePie
