@@ -3,7 +3,6 @@ import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as Icon from 'react-bootstrap-icons';
 import { FileStatus } from '../services/api';
-import { DebounceInput } from 'react-debounce-input';
 
 function FilterFiles({ minSize, setMinSize, search, dateRange,setSearch,setDateRange,setStatus,status }: {
     minSize: number,
