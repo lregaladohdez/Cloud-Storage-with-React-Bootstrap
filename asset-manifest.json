@@ -1,0 +1,15 @@
+{
+  "files": {
+    "main.css": "/Cloud-Storage-with-React-Bootstrap/static/css/main.a728de3b.css",
+    "main.js": "/Cloud-Storage-with-React-Bootstrap/static/js/main.85d832a7.js",
+    "static/js/787.91492173.chunk.js": "/Cloud-Storage-with-React-Bootstrap/static/js/787.91492173.chunk.js",
+    "index.html": "/Cloud-Storage-with-React-Bootstrap/index.html",
+    "main.a728de3b.css.map": "/Cloud-Storage-with-React-Bootstrap/static/css/main.a728de3b.css.map",
+    "main.85d832a7.js.map": "/Cloud-Storage-with-React-Bootstrap/static/js/main.85d832a7.js.map",
+    "787.91492173.chunk.js.map": "/Cloud-Storage-with-React-Bootstrap/static/js/787.91492173.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a728de3b.css",
+    "static/js/main.85d832a7.js"
+  ]
+}
