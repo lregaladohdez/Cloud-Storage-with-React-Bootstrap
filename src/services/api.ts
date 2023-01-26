@@ -1,13 +1,13 @@
-import {faker} from '@faker-js/faker';
+import {sampleUser, sampleUsers, sampleFiles} from './data';
 
 const delay = (delay: number) =>
   new Promise((resolve) => setTimeout(resolve, delay * 100));
 
 export enum FileType {
-  Document,
-  Archive,
-  Video,
-  Image,
+  Document = 'Document',
+  Archive = 'Archive',
+  Video = 'Video',
+  Image = 'Image',
 }
 
 export enum FileStatus {
@@ -35,57 +35,12 @@ export interface UploadCenterFile {
   isUploading: boolean;
 }
 
-let user: User = {
-  avatar: faker.image.avatar(),
-  email: faker.internet.email(),
-  id: faker.datatype.uuid(),
-  name: faker.name.fullName(),
-  hasShared: true,
-};
-
-let users: User[] = Array(faker.datatype.number({min: 50, max: 200}))
-  .fill(0)
-  .map((u) => ({
-    avatar: faker.image.avatar(),
-    email: faker.internet.email(),
-    id: faker.datatype.uuid(),
-    name: faker.name.fullName(),
-    hasShared: faker.datatype.boolean(),
-  }));
-
-let files: UploadCenterFile[] = Array(
-  faker.datatype.number({min: 50, max: 200}),
-)
-  .fill(0)
-  .map((r) => {
-    const file = {
-      id: faker.datatype.uuid(),
-      size: faker.datatype.number({min: 1, max: 50}),
-      uploaded: 0,
-      isUploading: false,
-      type: [
-        FileType.Archive,
-        FileType.Document,
-        FileType.Image,
-        FileType.Image,
-      ][faker.datatype.number({min: 0, max: 3})],
-      name: faker.commerce.productName(),
-      status: [FileStatus.Uploaded, FileStatus.Uploading, FileStatus.Shared][
-        faker.datatype.number({min: 0, max: 2})
-      ],
-      createdAt: faker.date.past().toISOString(),
-    };
-    file.uploaded =
-      file.status === FileStatus.Uploading
-        ? faker.datatype.number(file.size * Math.random())
-        : file.size;
-    file.isUploading =
-      file.status === FileStatus.Uploading ? faker.datatype.boolean() : false;
-    return file;
-  });
+let user = sampleUser as User;
+let users = sampleUsers as User[];
+let files = sampleFiles as UploadCenterFile[];
 
 export async function getUser(): Promise<User> {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
   return JSON.parse(JSON.stringify(user));
 }
 export async function editUser(editUser: User): Promise<User> {
@@ -100,10 +55,10 @@ export async function getFilesGrouped(): Promise<{
   Image: number;
   free: number;
 }> {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
 
   return {
-    free: faker.datatype.number({min: 50, max: 200}),
+    free: 50 + Math.round(Math.random() * 150),
     Archive: files
       .filter(
         (f) => f.status !== FileStatus.Uploading && f.type === FileType.Archive,
@@ -134,7 +89,7 @@ export async function getSharedUsers(
   take = 10,
   skip = 0,
 ): Promise<{data: User[]; take: number; skip: number; total: number}> {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
 
   const filteredUsers = users.filter(
     (u) =>
@@ -174,7 +129,7 @@ export async function getFiles({
   skip: number;
   total: number;
 }> {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
 
   const filteredFiles = files.filter(
     (f) =>
@@ -198,18 +153,18 @@ export async function getFiles({
 export async function getFileId(
   fileId: string,
 ): Promise<UploadCenterFile | undefined> {
-  await delay(faker.datatype.number({min: 1, max: 2}));
+  await delay(Math.round(Math.random() + 1));
   return files.find((f) => f.id === fileId);
 }
 
 export async function deleteFile(id: string) {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
   files = files.filter((f) => f.id !== id);
   return null;
 }
 
 export async function shareFile(fileId: string, userId: string): Promise<null> {
-  await delay(faker.datatype.number({min: 1, max: 9}));
+  await delay(Math.round(Math.random() * 9));
 
   const file = files.find((f) => f.id === fileId);
   const user = users.find((u) => u.id === userId);
@@ -225,7 +180,7 @@ export async function shareFile(fileId: string, userId: string): Promise<null> {
 export async function stopUpload(
   fileId: string,
 ): Promise<UploadCenterFile | undefined> {
-  await delay(faker.datatype.number({min: 1, max: 2}));
+  await delay(Math.round(Math.random()) + 1);
   const f = files.find((f) => f.id === fileId);
   if (f) {
     f.isUploading = false;
@@ -236,7 +191,7 @@ export async function stopUpload(
 export async function resumeUpload(
   fileId: string,
 ): Promise<UploadCenterFile | undefined> {
-  await delay(faker.datatype.number({min: 1, max: 2}));
+  await delay(Math.round(Math.random()) + 1);
   const f = files.find((f) => f.id === fileId);
   if (f) {
     f.isUploading = true;
@@ -252,10 +207,10 @@ export async function uploadFile({
   type: FileType;
   size: number;
 }) {
-  await delay(10);
+  await delay(1);
   const newFile = {
     createdAt: new Date().toISOString(),
-    id: faker.datatype.uuid(),
+    id: (Math.random() + 1).toString(36).substring(7),
     name,
     size,
     uploaded: 0,
