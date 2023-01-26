@@ -28,8 +28,11 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy React to GitHub Pages
-        uses: bitovi/github-actions-react-to-ghp@v1.2.0
+      - name: Build Yarn and npm
+        uses: linchpin/action-build-yarn-npm@master
+      - name: GitHub Pages
+        uses: crazy-max/ghaction-github-pages@v3.1.0
         with:
-          path: build
-          build_command: npm run build
+          build_dir: build/
+        
+      
