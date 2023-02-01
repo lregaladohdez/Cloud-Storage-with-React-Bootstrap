@@ -3,6 +3,7 @@ import { Col, Form, InputGroup, Row } from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as Icon from 'react-bootstrap-icons';
 import { FileStatus } from '../services/api';
+import { DateTime } from "luxon";
 
 function FilterFiles({ minSize, setMinSize, search, dateRange,setSearch,setDateRange,setStatus,status }: {
     minSize: number,
@@ -21,12 +22,12 @@ function FilterFiles({ minSize, setMinSize, search, dateRange,setSearch,setDateR
         { name: '50mb',value: 50 }
     ];
     const times = [
-        { name: 'Time'},
-        { name: 'Today' },
-        { name: 'Yesterday' },
-        { name: 'This Week' },
-        { name: 'This Month' },
-        { name: 'Last 30 days' },
+        { name: 'Time',start: DateTime.now().minus({years: 100}).toISO(),end: DateTime.now().endOf('day').toISO()},
+        { name: 'Today',start: DateTime.now().startOf('day').toISO(),end: DateTime.now().endOf('day').toISO() },
+        { name: 'Yesterday',start: DateTime.now().minus({day: 1}).startOf('day').toISO(),end: DateTime.now().minus({day: 1}).endOf('day').toISO() },
+        { name: 'This Week',start: DateTime.now().startOf('week').toISO(),end: DateTime.now().endOf('week').toISO() },
+        { name: 'This Month',start: DateTime.now().startOf('month').toISO(),end: DateTime.now().endOf('month').toISO() },
+        { name: 'Last 30 days',start: DateTime.now().minus({days: 30}).toISO(),end: DateTime.now().endOf('day').toISO() },
     ]
     const statuses = [
         { name: 'Status', value: '' },
@@ -34,11 +35,20 @@ function FilterFiles({ minSize, setMinSize, search, dateRange,setSearch,setDateR
         { name: 'Uploading', value: FileStatus.Uploading },
         { name: 'Shared', value: FileStatus.Shared },
     ]
+
+    function handleTimeChange(e: React.ChangeEvent<HTMLSelectElement>){
+        const time = times.find(t => t.name === e.target.value);
+        if (time) { 
+            setDateRange({ createdAtStart: time.start, createdAtEnd: time.end })
+        }
+    }
+
     return (
         <Form>
             <Row >
                 <Col className="mb-1" sm={3} md={2}>
-                    <Form.Select placeholder="Time" >
+                    
+                    <Form.Select placeholder="Time" onChange={handleTimeChange} >
                         {times.map(t => <option key={t.name}>{t.name}</option>)}
                     </Form.Select>
                 

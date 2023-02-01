@@ -21,15 +21,14 @@ function App() {
   const [dateRange, setDateRange] = useState({ createdAtStart: '', createdAtEnd: '' })
   const [files, setFiles] = useState<UploadCenterFile[]>([]);
   const debouncedSearch = useDebounce<string>(search, 500)
-  const { data, error, isLoading } = useQuery(`getFiles-${minSize}-${status}-${debouncedSearch}-${dateRange}`,
+  const { data, error, isLoading } = useQuery(`getFiles-${minSize}-${status}-${debouncedSearch}-${dateRange.createdAtStart}-${dateRange.createdAtEnd}`,
     () => getFiles({ status, createdAtEnd: dateRange.createdAtEnd, createdAtStart: dateRange.createdAtStart, search:debouncedSearch, take: 10, skip: 0, minSize }));
   
   useEffect(() => {
     if (data?.data) { 
       setFiles(data.data);
     }
-    },[data]);
-  
+  }, [data]);
   return (
     <Container className="App">
       <Stack gap={3} style={{ marginTop: 10 }}>
